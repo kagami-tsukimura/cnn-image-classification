@@ -1,76 +1,14 @@
-import json
-import subprocess
 from glob import glob
-from pathlib import Path
 from tqdm import tqdm
 
 import torch
 import torchvision
 from torch.utils.data import DataLoader
-from torchvision import transforms
-from torchvision.datasets.utils import download_url
 
 from util.custom_dataset import CustomDataset
-
-
-def prepare_data():
-    """Prepare data.
-    Returns:
-        test_transform: test data transform
-    """
-
-    test_transform = transforms.Compose(
-        [
-            transforms.Resize(256),
-            transforms.CenterCrop(224),
-            transforms.ToTensor(),
-            # The values calculated from the ImageNet dataset.
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ]
-    )
-    return test_transform
-
-
-def get_classes(CLASS_JSON):
-    """Get class names.
-    Args:
-        CLASS_JSON: class json file
-    Returns:
-        class_names: class names
-    """
-
-    json_path = f"data/{CLASS_JSON}"
-    if not Path(json_path).exists():
-        # If there is no file, download it.
-        download_url("https://git.io/JebAs", "data", CLASS_JSON)
-
-    # Read the class list.
-    with open(json_path) as f:
-        data = json.load(f)
-        class_names = [x["ja"] for x in data]
-
-    return class_names
-
-
-def mkdir(OUTPUT, dir):
-    """Create directory.
-    Args:
-        dir: directory path
-    """
-
-    cmd = f"mkdir -p {OUTPUT}/{dir}"
-    subprocess.call(cmd.split())
-
-
-def mv_file(img, OUTPUT, dir):
-    """Move file.
-    Args:
-        img: image path
-        dir: directory path
-    """
-
-    cmd = f"mv {img} {OUTPUT}/{dir}"
-    subprocess.call(cmd.split())
+from util.prepare_data import prepare_data
+from util.class_names import get_classes
+from util.file_controls import mkdir, mv_file
 
 
 def main():
