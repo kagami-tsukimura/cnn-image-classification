@@ -1,0 +1,15 @@
+# Directory to store image data to be categorized as CNN classification.
+input/*
+!.gitkeep
+
+# Directory that store CNN learning results.
+output/*
+!.gitkeep
+
+# Directory that store learning models.
+weights/*
+!.gitkeep
+
+# Directory that List of class names.
+data/*
+!.gitkeep
